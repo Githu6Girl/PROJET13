@@ -1,37 +1,23 @@
-const { configDotenv } = require('dotenv');
-const { Client } = require('pg');
-require('dotenv').config(); // Load environment variables
+require('dotenv').config();
+const { Sequelize } = require('sequelize');
 
-const client = new Client({
-    user:  'postgres',
-    host:  'localhost',
-    database: 'gestion_departement',
-    password:  '0772442555amina',
-    port:  5432,
-});
+const sequelize = new Sequelize(
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASSWORD,
+  {
+    host: process.env.DB_HOST,
+    dialect: 'postgres',
+    port: Number(process.env.DB_PORT),
+    logging: false, // désactive les logs SQL dans la console
+  }
+);
 
+// Test de connexion
+sequelize.authenticate()
+  .then(() => console.log('✅ Connexion à la base réussie'))
+  .catch(err => console.error('❌ Erreur de connexion à la base :', err.message));
 
-
-client.connect()
-    .then(() => console.log(" Database connected successfully"))
-    .catch(err => console.error(" Database connection error:", err.message));
-
-module.exports = client;
-
-
-
-//create user
-//create departement
-//get all users
-//get all departements
-//get user by id
-//get departement by id
-//update user by id
-//update departement by id
-//delete user by id
-//delete departement by id
-
-
-
+module.exports = sequelize;
 
 
